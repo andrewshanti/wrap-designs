@@ -87,6 +87,13 @@ const base=P.details;
 P.details=async function(it){ let pid=await base(it); for(let k=0;k<2;k++){ P.status=it.id+': verify '+k; if(await P.check(pid,it)) return pid; P.status=it.id+': redo details'; await base(it); } throw 'verify failed'; };
 const tg=P.setTags;
 P.setTags=async function(id){ await tg(id); try{ const vis=e=>e&&e.offsetParent!==null; const img=[...document.querySelectorAll('img')].find(i=>vis(i)&&/camera_label=context-1/.test(i.src)); if(img){ let t=img; for(let k=0;k<6;k++){ t=t.parentElement; if(t.tagName==='PFA-MOCKUP-RADIO-ITEM') break; } const st=[...t.querySelectorAll('*')].find(e=>e.children.length===0&&e.textContent.trim()==='star'); if(st){ (st.closest('button')||st).__rc(); await new Promise(r=>setTimeout(r,1200)); } } }catch(e){} };
+P.ensureVariants=async()=>{ const sleep=ms=>new Promise(r=>setTimeout(r,ms)); const vis=e=>e&&e.offsetParent!==null;
+ const sel=()=>{const m=document.body.innerText.match(/(\d+) variants? selected/);return m?+m[1]:null;};
+ const svs=()=>[...document.querySelectorAll('button,a,span,div')].filter(e=>vis(e)&&e.textContent.trim()==='Select variants');
+ if(sel()===null){ if(!svs().length){ const ds=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='design_services'); if(ds){ds.__rc(); await sleep(1500);} }
+   const s=svs(); if(s.length){ s[s.length-1].__rc(); await sleep(1500);} }
+ if(sel()!==6){ const c=[...document.querySelectorAll('div.checkbox-container')].find(e=>vis(e)&&/Select all/.test(e.textContent)); if(c){c.__rc(); await sleep(1200);} }
+ const n=sel(); if(n!==6) throw 'variants='+n; };
 P.tagsUrl='https://raw.githubusercontent.com/andrewshanti/wrap-designs/99f4ba0778fc87bbfd6845a3dae7778167cf641f/tags.json';
 })();
 
