@@ -54,6 +54,7 @@ P.details=async function(it){
  const d=[...document.querySelectorAll('[contenteditable=true]')].find(vis); d.focus(); document.execCommand('selectAll'); document.execCommand('insertHTML',false,it.desc); d.dispatchEvent(new Event('input',{bubbles:true})); await sleep(500);
  const dtv=anyText('Detailed table view')[0]; if(dtv){dtv.__rc(); await sleep(1200);}
  await setPrices(it.prices);
+ { const t2=[...document.querySelectorAll('input[type=text]')].find(vis); if(t2 && t2.value!==it.title){ setVal(t2,it.title); await sleep(600);} }
  P.status=it.id+': saving';
  const sd=await waitFor(()=>btn('Save as draft')||btn('Save changes'),10000); sd.__rc();
  await sleep(3500);
