@@ -17,8 +17,8 @@ async function setPrices(map){
  const sizes=Object.keys(map);
  for(const s of sizes){
   for(const z of sizes){const b=rowBox(z); if(!b) throw 'no row '+z; if(isOn(b)!==(z===s)){b.__rc();await sleep(250);}}
-  const es=anyText('Edit price'); es[es.length-1].__rc(); await sleep(900);
-  const pane=await waitFor(()=>document.querySelector('.cdk-overlay-pane input[type=number]')?document.querySelector('.cdk-overlay-pane'):null,5000);
+  const es=[...document.querySelectorAll('button')].filter(b=>vis(b)&&b.textContent.trim()==='Edit price'); es[es.length-1].__rc(); await sleep(900);
+  const pane=await waitFor(()=>{const i=[...document.querySelectorAll('.cdk-overlay-pane input[type=number]')].find(vis); return i?i.closest('.cdk-overlay-pane'):null;},5000); if(!pane) throw 'no price dialog';
   setVal(pane.querySelector('input[type=number]'),String(map[s])); await sleep(300);
   [...pane.querySelectorAll('button')].find(b=>b.textContent.trim()==='Apply').__rc(); await sleep(900);
  }
@@ -42,6 +42,10 @@ async function one(it){
  await waitFor(()=>/mockup-library|product-details/.test(location.href),90000);
  if(/mockup-library/.test(location.href)){ const ss=await waitFor(()=>btn('Save selection'),30000); await sleep(1500); ss.__rc(); await waitFor(()=>/product-details/.test(location.href),60000); }
  if(!/product-details/.test(location.href)) throw 'not on details page: '+location.pathname;
+ const pid=await P.details(it);
+ return pid;
+}
+P.details=async function(it){
  const pid=(location.href.match(/product-details\/([a-f0-9]+)/)||[])[1];
  P.status=it.id+': details '+pid; it.pid=pid;
  await waitFor(()=>[...document.querySelectorAll('input[type=text]')].find(vis),30000); await sleep(2000);
@@ -54,7 +58,7 @@ async function one(it){
  const sd=await waitFor(()=>btn('Save as draft')||btn('Save changes'),10000); sd.__rc();
  await sleep(3500);
  return pid;
-}
+};
 P.run=async function(){ if(P.running) return; P.running=true;
  while(P.q.length){ const it=P.q.shift(); try{ const pid=await one(it); P.done.push({id:it.id,pid}); }catch(e){ P.err.push({id:it.id,e:String(e),pid:it.pid}); } }
  P.running=false; P.status='idle'; };
