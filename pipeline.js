@@ -46,6 +46,13 @@ async function one(it){
  return pid;
 }
 P.setPrices=setPrices;
+P.setTags=async function(id){
+ if(!P.tags) P.tags=await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/e54995cd60728f57c91aef88d5e34a7c5a749ee5/tags.json')).json();
+ const T=P.tags[id]; if(!T) return;
+ const ca=[...document.querySelectorAll('button,a,span')].find(e=>vis(e)&&e.textContent.trim()==='Clear all'); if(ca){ca.__rc(); await sleep(800);}
+ const inp=[...document.querySelectorAll('input')].find(e=>vis(e)&&e.placeholder==='Add tag'); if(!inp) return;
+ for(const t of T){ inp.focus(); Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(inp,t); inp.dispatchEvent(new Event('input',{bubbles:true})); await sleep(150); for(const ty of ['keydown','keypress','keyup']) inp.dispatchEvent(new KeyboardEvent(ty,{key:'Enter',code:'Enter',keyCode:13,which:13,bubbles:true})); await sleep(220); }
+};
 P.details=async function(it){
  const pid=(location.href.match(/product-details\/([a-f0-9]+)/)||[])[1];
  P.status=it.id+': details '+pid; it.pid=pid;
@@ -55,6 +62,7 @@ P.details=async function(it){
  const d=[...document.querySelectorAll('[contenteditable=true]')].find(vis); d.focus(); document.execCommand('selectAll'); document.execCommand('insertHTML',false,it.desc); d.dispatchEvent(new Event('input',{bubbles:true})); await sleep(500);
  const dtv=anyText('Detailed table view')[0]; if(dtv){dtv.__rc(); await sleep(1200);}
  await setPrices(it.prices);
+ try{ await P.setTags(it.id); }catch(e){}
  { const t2=[...document.querySelectorAll('input[type=text]')].find(vis); if(t2 && t2.value!==it.title){ setVal(t2,it.title); await sleep(600);} }
  P.status=it.id+': saving';
  const sd=await waitFor(()=>btn('Save as draft')||btn('Save changes'),10000); sd.__rc();
