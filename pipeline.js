@@ -47,7 +47,7 @@ async function one(it){
 }
 P.setPrices=setPrices;
 P.setTags=async function(id){
- if(!P.tags) P.tags=await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/e54995cd60728f57c91aef88d5e34a7c5a749ee5/tags.json')).json();
+ if(!P.tags) P.tags=await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/99f4ba0778fc87bbfd6845a3dae7778167cf641f/tags.json')).json();
  const T=P.tags[id]; if(!T) return;
  const ca=[...document.querySelectorAll('button,a,span')].find(e=>vis(e)&&e.textContent.trim()==='Clear all'); if(ca){ca.__rc(); await sleep(800);}
  const inp=[...document.querySelectorAll('input')].find(e=>vis(e)&&e.placeholder==='Add tag'); if(!inp) return;
@@ -73,4 +73,21 @@ P.run=async function(){ if(P.running) return; P.running=true;
  while(P.q.length){ const it=P.q.shift(); try{ const pid=await one(it); P.done.push({id:it.id,pid}); }catch(e){ P.err.push({id:it.id,e:String(e),pid:it.pid}); } }
  P.running=false; P.status='idle'; };
 })();
-'pipeline loaded'
+
+(function(){ const P=window.__P;
+P.tmpl=P.tmpl||null;
+P.add=function(arr){ for(const x of arr){ P.q.push({id:x.id,file:x.file,b64:x.b64,title:x.title,desc:P.tmpl.replace("%%HOOK%%",x.hook).replace("%%COLL%%",x.coll),prices:{'30" x 36"':27.99,'30" x 72"':34.99,'30" x 180"':49.99}}); } if(!P.running) P.run(); return P.q.length; };
+P.fetchAdd=async function(ids,base){ if(!P.tmpl) P.tmpl=await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/2f4ab615b5412517d970174f7c52be0f8a13e828/desc_tmpl.txt')).text(); const arr=[]; for(const id of ids){ try{ arr.push(await (await fetch(base+id+'.json')).json()); }catch(e){ P.err.push({id,e:'fetch '+e}); } } P.add(arr); return arr.length; };
+P.check=async function(pid,it){ const vis=e=>e&&e.offsetParent!==null; const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+ history.pushState({},'','/app/product-details/'+pid); window.dispatchEvent(new PopStateEvent('popstate',{state:{}}));
+ const t0=Date.now(); while(Date.now()-t0<20000){ await sleep(700); if([...document.querySelectorAll('tr')].length>=4 && [...document.querySelectorAll('input[type=text]')].find(vis)) break; } await sleep(1500);
+ const t=[...document.querySelectorAll('input[type=text]')].find(vis); const rows=[...document.querySelectorAll('tr')].map(r=>r.innerText).join(' ');
+ return !!t && t.value===it.title && /27\.99/.test(rows) && /34\.99/.test(rows) && /49\.99/.test(rows); };
+const base=P.details;
+P.details=async function(it){ let pid=await base(it); for(let k=0;k<2;k++){ P.status=it.id+': verify '+k; if(await P.check(pid,it)) return pid; P.status=it.id+': redo details'; await base(it); } throw 'verify failed'; };
+const tg=P.setTags;
+P.setTags=async function(id){ await tg(id); try{ const vis=e=>e&&e.offsetParent!==null; const img=[...document.querySelectorAll('img')].find(i=>vis(i)&&/camera_label=context-1/.test(i.src)); if(img){ let t=img; for(let k=0;k<6;k++){ t=t.parentElement; if(t.tagName==='PFA-MOCKUP-RADIO-ITEM') break; } const st=[...t.querySelectorAll('*')].find(e=>e.children.length===0&&e.textContent.trim()==='star'); if(st){ (st.closest('button')||st).__rc(); await new Promise(r=>setTimeout(r,1200)); } } }catch(e){} };
+P.tagsUrl='https://raw.githubusercontent.com/andrewshanti/wrap-designs/99f4ba0778fc87bbfd6845a3dae7778167cf641f/tags.json';
+})();
+
+'pipeline v6 loaded'
