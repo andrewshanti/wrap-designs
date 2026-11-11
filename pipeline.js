@@ -45,6 +45,7 @@ async function one(it){
  const pid=await P.details(it);
  return pid;
 }
+P.setPrices=setPrices;
 P.details=async function(it){
  const pid=(location.href.match(/product-details\/([a-f0-9]+)/)||[])[1];
  P.status=it.id+': details '+pid; it.pid=pid;
