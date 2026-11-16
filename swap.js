@@ -21,7 +21,7 @@ window.__swapHere=async function(code,etsy){
  if(!inp) throw 'no file input';
  log('upload');
  const dt=new DataTransfer(); dt.items.add(file); inp.files=dt.files; inp.dispatchEvent(new Event('change',{bubbles:true}));
- const sv=await waitFor(()=>{const b=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='Save product');return b&&!b.disabled&&document.body.innerText.includes(it.file.slice(0,14))&&[...document.querySelectorAll('button')].some(x=>vis(x)&&x.textContent.trim()==='Position')?b:null;},150000);
+ const sv=await waitFor(()=>{const b=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='Save product');return b&&!b.disabled&&document.body.innerText.includes(it.file.slice(0,14))&&[...document.querySelectorAll('button')].some(x=>vis(x)&&x.textContent.trim()==='Position')?b:null;},300000);
  if(!sv) throw 'upload not placed';
  await sleep(2500); log('save'); sv.__rc();
  await waitFor(()=>/mockup-library|product-details/.test(location.href),120000);
