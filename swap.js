@@ -27,9 +27,9 @@ window.__swapHere=async function(code,etsy){
  await waitFor(()=>/mockup-library|product-details/.test(location.href),120000);
  if(/mockup-library/.test(location.href)){const ss=await waitFor(()=>[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='Save selection'),30000); await sleep(1500); ss.__rc(); await waitFor(()=>/product-details/.test(location.href),60000);}
  if(!/product-details/.test(location.href)) throw 'not on details';
- await waitFor(()=>document.querySelectorAll('pfa-mockup-radio-item').length>3,40000); await sleep(3000);
+ await sleep(4000); await waitFor(()=>!document.body.innerText.includes('Loading mockups')&&document.querySelectorAll('pfa-mockup-radio-item').length>3&&!/\b0 mockups selected/.test(document.body.innerText),90000); await sleep(4000);
  let res='saved';
- if(etsy){ log('publish'); if(typeof window.__etsyImg!=='function') (0,eval)(await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/44ff03db50960b924717e11dad1d70552a8beef2/etsyimg.js')).text()); res=await window.__etsyImg(true); }
+ if(etsy){ log('publish'); if(typeof window.__etsyImg!=='function') (0,eval)(await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/44ff03db50960b924717e11dad1d70552a8beef2/etsyimg.js')).text()); res=await window.__etsyImg(true); if(/err/.test(res)){await sleep(15000); res=await window.__etsyImg(true);} }
  log('DONE '+res);
  }catch(e){log('ERR '+e);}
 };
