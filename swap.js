@@ -34,3 +34,11 @@ window.__swapHere=async function(code,etsy){
  }catch(e){log('ERR '+e);}
 };
 })();
+window.__shopPub=async function(){
+ const sleep=ms=>new Promise(r=>setTimeout(r,ms)); const vis=e=>e&&e.offsetParent!==null;
+ let t0=Date.now(); while(Date.now()-t0<25000&&!document.body.innerText.match(/[1-9]\d*\/\d+ mockups selected/)) await sleep(800);
+ await sleep(2500);
+ const pb=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='Publish'); if(!pb||pb.disabled) return 'no publish';
+ pb.__rc(); let c=null; for(let j=0;j<20&&!c;j++){await sleep(500); c=[...document.querySelectorAll('.cdk-overlay-pane button')].find(b=>vis(b)&&b.textContent.trim()==='Confirm');}
+ if(!c) return 'no confirm'; c.__rc(); await sleep(3000); return 'published';
+};
