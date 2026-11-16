@@ -11,6 +11,8 @@ window.__swapHere=async function(code,etsy){
  const it=await (await fetch('https://raw.githubusercontent.com/andrewshanti/wrap-designs/23526267d047354137af292c93873c3913b5215b/items/'+code+'.json')).json();
  const file=await pngFile(it.b64,it.file);
  log('wait layer');
+ await waitFor(()=>[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='Save product'),60000); await sleep(3000);
+ if(![...document.querySelectorAll('button')].some(b=>vis(b)&&b.textContent.trim()==='delete')){const t=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='design_services'); if(t){t.__rc(); await sleep(2000);}}
  const del=await waitFor(()=>document.body.innerText.includes(it.file.slice(0,14))&&[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='delete'),60000); if(!del) throw 'no layer';
  await sleep(1500); del.__rc(); await sleep(2000);
  if(document.body.innerText.includes(it.file.slice(0,14))) throw 'layer not deleted';
