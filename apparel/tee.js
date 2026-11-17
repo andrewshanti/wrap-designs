@@ -47,7 +47,7 @@ window.__buildTee=async function(id,name,ratio,opt){ opt=opt||{}; const side=opt
  [...pane.querySelectorAll('button')].find(b=>b.textContent.trim()==='close').__rc(); await S(1500);
  if(!leaf('Variants and layers')){B('design_services').__rc(); await S(2000);}
  log('default');
- scrollTop(); await S(500); sw('White').__rc(); await S(1200);
+ scrollTop(); await S(500); sw(LIGHT[0]).__rc(); await S(1200);
  await place(id+'_dk.png',ratio,side);
  for(const c of DARK){ log('spec '+c); scrollTop(); await S(600); sw(c).__rc(); await S(1500);
   const mk=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.includes('Make a specific design for '+c)); if(!mk) throw 'no make '+c; mk.__rc(); await S(2500);
