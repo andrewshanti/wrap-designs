@@ -13,12 +13,8 @@ window.__fixSize=async function(colors,w,top){
  for(const c of colors){
   const pan=leaf('Variants and layers'); let p=pan; for(let i=0;i<4&&p;i++) p=p.parentElement; p&&p.querySelectorAll('*').forEach(e=>{if(e.scrollTop>0) e.scrollTop=0}); await S(400);
   const sw=[...document.querySelectorAll('button[title],button[aria-label]')].find(e=>vis(e)&&(e.getAttribute('title')||e.getAttribute('aria-label'))===c); sw.__rc(); await S(1500);
-  // select the layer so position inputs show
   const lay=[...document.querySelectorAll('*')].find(e=>vis(e)&&e.children.length===0&&/_(dk|lt)\.png$/.test(e.textContent.trim())); if(!lay){out.push(c+':nolayer');continue;}
-  if(posIns().length<6){ lay.__rc(); await S(1200); }
-  if(posIns().length<6){ out.push(c+':noinputs'); continue; }
-  setIn(posIns()[0],String(w)); await S(900); setIn(posIns()[5],String(top)); await S(900);
-  const h=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='align_horizontal_center'); if(h){h.__rc(); await S(500);}
+  const file=lay.textContent.trim(); await window.__place(file,1.0,'front');
   out.push(c+':'+posIns().map(i=>i.value).slice(0,2).join('x'));
  }
  log('save '+out.join(' '));

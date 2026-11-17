@@ -27,6 +27,7 @@ async function place(file,ratio,side){
  const h=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='align_horizontal_center'); if(h){h.__rc(); await S(600);}
  return v.join(',');
 }
+window.__place=place;
 function scrollTop(){const pan=leaf('Variants and layers'); let p=pan; for(let i=0;i<4&&p;i++) p=p.parentElement; p&&p.querySelectorAll('*').forEach(e=>{if(e.scrollTop>0) e.scrollTop=0});}
 const sw=c=>[...document.querySelectorAll('button[title],button[aria-label]')].find(e=>vis(e)&&(e.getAttribute('title')||e.getAttribute('aria-label'))===c);
 window.__buildTee=async function(id,name,ratio,opt){ opt=opt||{}; const side=opt.side||'front'; const C=CF(); const LIGHT=C.light||LIGHT_D, DARK=C.dark||DARK_D; const NV=String(C.nvar||77);
