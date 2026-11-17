@@ -19,9 +19,9 @@ async function place(file,ratio,side){
  const f=await pf(file); const dt=new DataTransfer(); dt.items.add(f); inp.files=dt.files; inp.dispatchEvent(new Event('change',{bubbles:true}));
  if(!await W(()=>document.body.innerText.includes(file)&&posIns().length>=6,90000)) throw 'upload not placed '+file;
  if(!vis(B('Position'))){} await S(1500);
- const w=Math.min(12, Math.round(11*ratio*100)/100);
+ const C2=(window.__CFG||{}); const mh=(side==='back'?(C2.maxHBack||11):(C2.maxH||11)); const w=Math.min(12, Math.round(mh*ratio*100)/100);
  setIn(posIns()[0],String(w)); await S(1000);
- setIn(posIns()[5],side==='back'?'8':'6'); await S(1000);
+ setIn(posIns()[5],String(side==='back'?8:((window.__CFG||{}).frontTop||6))); await S(1000);
  const v=posIns().map(i=>i.value); if(Math.abs(parseFloat(v[0])-w)>0.05) throw 'width not set '+v;
  // center horizontally
  const h=[...document.querySelectorAll('button')].find(b=>vis(b)&&b.textContent.trim()==='align_horizontal_center'); if(h){h.__rc(); await S(600);}
