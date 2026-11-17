@@ -58,7 +58,7 @@ window.__buildTee=async function(id,name,ratio,opt){ opt=opt||{}; const side=opt
  if(!await W(()=>/mockup-library|product-details/.test(location.href),120000)) throw 'save timeout';
  if(/mockup-library/.test(location.href)){
   await W(()=>leaf('Person 1 Front'),30000); await S(2500);
-  for(const c of ['Person 1 Front','Person 2','Person 3 Front','Person 4 Front','Person 5 Context']){ const el=leaf(c); if(!el) continue; (el.closest('button,a,[role=tab]')||el.parentElement).__rc(); await S(2200);
+  for(const c of (side==='back'?['Person 1 Back','Person 3 Back','Person 4 Back','Person 1 Front','Person 2']:['Person 1 Front','Person 2','Person 3 Front','Person 4 Front','Person 5 Context'])){ const el=leaf(c); if(!el) continue; (el.closest('button,a,[role=tab]')||el.parentElement).__rc(); await S(2200);
    const sa=leaf('Select all'); const cb=sa&&(sa.closest('label')||sa.parentElement).querySelector('input[type=checkbox]'); if(cb&&!cb.checked){(sa.closest('label')||sa.parentElement).__rc(); await S(1200);} }
   const ss=await W(()=>B('Save selection'),20000); await S(1000); ss.__rc();
   if(!await W(()=>/product-details/.test(location.href),90000)) throw 'no details';
