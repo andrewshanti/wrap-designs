@@ -41,11 +41,11 @@ window.__buildHat=async function(id,name,ratio,opt){ opt=opt||{}; const side=opt
  if(!leaf('Variants and layers')){B('design_services').__rc(); await S(2000);}
  if(!leaf('Variants and layers')) throw 'no panel';
  log('variants');
- B('Select variants').__rc(); const pane=await W(()=>[...document.querySelectorAll('.cdk-overlay-pane')].find(p=>/Select variants/.test(p.innerText)&&/variants selected/.test(p.innerText)),15000); if(!pane) throw 'no variant dialog';
+ B('Select variants').__rc(); const pane=await W(()=>[...document.querySelectorAll('.cdk-overlay-pane')].find(p=>/Select variants/.test(p.innerText)&&/variants? selected/.test(p.innerText)),15000); if(!pane) throw 'no variant dialog';
  for(const c of LIGHT.concat(DARK)){ const lab=[...pane.querySelectorAll('*')].find(e=>e.children.length===0&&e.textContent.trim()===c); let row=lab; for(let i=0;i<6&&row&&!row.querySelector('[role=checkbox]');i++) row=row.parentElement; const cb=row&&row.querySelector('[role=checkbox]'); if(!cb) throw 'no color '+c; if(cb.getAttribute('aria-checked')!=='true'){cb.__rc(); await S(350);} }
  const want=LIGHT.concat(DARK);
  for(const cb of [...pane.querySelectorAll('[role=checkbox]')]){ if(cb.getAttribute('aria-checked')!=='true') continue; let row=cb; for(let i=0;i<6&&row&&!/sizes/.test(row.innerText||'');i++) row=row.parentElement; const nm=(row?.innerText||'').split('\n').map(x=>x.trim()).filter(x=>x&&!/sizes|keyboard|check/.test(x))[0]; if(nm&&!want.includes(nm)&&/sizes/.test(row.innerText)){ cb.__rc(); await S(350);} }
- await S(800); const sel=pane.innerText.match(/(\d+) variants selected/)?.[1]; if(sel!==NV) throw 'variants '+sel;
+ await S(800); const sel=pane.innerText.match(/(\d+) variants? selected/)?.[1]; if(sel!==NV) throw 'variants '+sel;
  [...pane.querySelectorAll('button')].find(b=>b.textContent.trim()==='close').__rc(); await S(1500);
  if(!leaf('Variants and layers')){B('design_services').__rc(); await S(2000);}
  log('default');
