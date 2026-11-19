@@ -83,9 +83,9 @@ window.__buildHat=async function(id,name,ratio,opt){ opt=opt||{}; const side=opt
  const boxes=()=>[...document.querySelectorAll('tr')].slice(1).map(r=>r.querySelector('[role=checkbox]')).filter(Boolean); const on=b=>b.getAttribute('aria-checked')==='true';
  for(const b of boxes()){ if(!on(b)){b.__rc(); await S(200);} }
  const es=[...document.querySelectorAll('button')].filter(b=>vis(b)&&b.textContent.trim()==='Edit price'); es[es.length-1].__rc(); await S(1000);
- const pane=await W(()=>{const i=[...document.querySelectorAll('.cdk-overlay-pane input')].find(vis); return i?i.closest('.cdk-overlay-pane'):null;},6000); if(!pane) throw 'no price dialog';
- setIn([...pane.querySelectorAll('input')].find(vis),price); await S(400);
- [...pane.querySelectorAll('button')].find(b=>/^(Apply|Save|Confirm)$/.test(b.textContent.trim())).__rc(); await S(1500);
+ const ppane=await W(()=>{const i=[...document.querySelectorAll('.cdk-overlay-pane input')].find(vis); return i?i.closest('.cdk-overlay-pane'):null;},6000); if(!ppane) throw 'no price dialog';
+ setIn([...ppane.querySelectorAll('input')].find(vis),price); await S(400);
+ [...ppane.querySelectorAll('button')].find(b=>/^(Apply|Save|Confirm)$/.test(b.textContent.trim())).__rc(); await S(1500);
  const rows=[...document.querySelectorAll('tr')].slice(1).map(r=>(r.innerText.match(/USD ([\d.]+)/)||[])[1]).filter(Boolean); if(!rows.length||rows.some(x=>x!==Number(price).toFixed(2))) throw 'price check '+rows;
  if(opt.stopAt==='publish'){log('STOP publish');return;}
  log('publish');
